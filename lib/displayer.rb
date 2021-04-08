@@ -8,9 +8,9 @@ class Displayer
 
   def display(sorted_by_views, sorted_by_uniq_views)
     puts ALL_VIEWS_HEADING_MGS
-    write_statistics_to_console(sorted_by_views, :views, ALL_VIEWS_HEADING_MGS)
+    write_statistics_to_console(sorted_by_views, :views, ALL_VIEWS_LINE_MSG)
     puts UNIQ_VIEWS_HEADING_MGS
-    write_statistics_to_console(sorted_by_uniq_views, :uniq_views, UNIQ_VIEWS_HEADING_MGS)
+    write_statistics_to_console(sorted_by_uniq_views, :uniq_views, UNIQ_VIEWS_LINE_MSG)
   end
 
   private

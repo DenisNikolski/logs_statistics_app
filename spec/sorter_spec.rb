@@ -4,37 +4,31 @@ require 'sorter'
 require 'page_views'
 
 describe Sorter do
-  describe '#sort' do
-    subject { Sorter.new.sort(pages_views, criteria) }
-    let(:pages_views) { [] }
-
-    before do
-      pages_views << PageViews.new('/home', 3, 3)
-      pages_views << PageViews.new('/help_page/1', 2, 1)
-      pages_views << PageViews.new('/about', 4, 2)
+  describe '#call' do
+    subject { Sorter.new(pages_views).call(criteria) }
+    let(:pages_views) do
+      [PageViews.new('/home', 3, 3),
+       PageViews.new('/help_page/1', 2, 1),
+       PageViews.new('/about', 4, 2)]
     end
 
-    context 'sort by all views' do
-      let(:pages_sorted_by_all_views) { [] }
+    context 'when sort criteria is views' do
       let(:criteria) { :views }
-
-      before do
-        pages_sorted_by_all_views << PageViews.new('/about', 4, 2)
-        pages_sorted_by_all_views << PageViews.new('/home', 3, 3)
-        pages_sorted_by_all_views << PageViews.new('/help_page/1', 2, 1)
+      let(:pages_sorted_by_all_views) do
+        [PageViews.new('/about', 4, 2),
+         PageViews.new('/home', 3, 3),
+         PageViews.new('/help_page/1', 2, 1)]
       end
 
       it { is_expected.to eq(pages_sorted_by_all_views) }
     end
 
-    context 'sort by uniq views' do
-      let(:pages_sorted_by_uniq_views) { [] }
+    context 'when sort criteria is uniq views' do
       let(:criteria) { :uniq_views }
-
-      before do
-        pages_sorted_by_uniq_views << PageViews.new('/home', 3, 3)
-        pages_sorted_by_uniq_views << PageViews.new('/about', 4, 2)
-        pages_sorted_by_uniq_views << PageViews.new('/help_page/1', 2, 1)
+      let(:pages_sorted_by_uniq_views) do
+        [PageViews.new('/home', 3, 3),
+         PageViews.new('/about', 4, 2),
+         PageViews.new('/help_page/1', 2, 1)]
       end
 
       it { is_expected.to eq(pages_sorted_by_uniq_views) }

@@ -30,13 +30,13 @@ describe FileValidator do
       it { is_expected.to eq(false) }
     end
 
-    context 'file path is empty' do
+    context 'when file path is empty' do
       let(:file_path) { '' }
 
       it { is_expected.to eq(false) }
     end
 
-    context 'file does not exists' do
+    context 'when file does not exists' do
       let(:file_path) { 'spec/fixtures/files/file_that_does_not_exists.log' }
 
       it { is_expected.to eq(false) }

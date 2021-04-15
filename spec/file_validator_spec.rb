@@ -1,30 +1,30 @@
 # frozen_string_literal: true
 
-require 'validator'
+require 'validators/file_validator'
 
-describe Validator do
+describe FileValidator do
   describe '#valid?' do
-    subject { Validator.new(file_path).valid? }
+    subject { FileValidator.new(file_path).valid? }
 
-    context 'proper file exists' do
+    context 'when proper file exists' do
       let(:file_path) { 'spec/fixtures/files/webserver.log' }
 
       it { is_expected.to eq(true) }
     end
 
-    context 'no file path is passed' do
+    context 'when no file path is passed' do
       let(:file_path) {}
 
       it { is_expected.to eq(false) }
     end
 
-    context 'wrong file extension' do
+    context 'when wrong file extension' do
       let(:file_path) { 'webserver.jpg' }
 
       it { is_expected.to eq(false) }
     end
 
-    context 'file extension without extension' do
+    context 'when file without extension' do
       let(:file_path) { 'webserver' }
 
       it { is_expected.to eq(false) }

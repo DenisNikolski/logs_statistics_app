@@ -2,46 +2,42 @@
 
 require 'parser'
 require 'page_views'
+require 'validators/file_data_validator'
 
 describe Parser do
-  describe '#parse' do
-    subject { Parser.new.parse(file) }
-    let(:pages_views) { [] }
+  describe '#call' do
+    subject { Parser.new(FileDataValidator, file).call }
 
-    context 'parse file with all data' do
+    context 'when file contains all data' do
       let(:file) { 'spec/fixtures/files/webserver_small.log' }
-
-      before do
-        pages_views << PageViews.new('/about', 4, 2)
-        pages_views << PageViews.new('/home', 3, 3)
-        pages_views << PageViews.new('/help_page/1', 2, 1)
+      let(:pages_ips) do
+        { '/about' => %w[1.1.1.1 1.1.1.1 1.1.1.5 1.1.1.5],
+          '/help_page/1' => %w[1.1.1.4 1.1.1.4],
+          '/home' => %w[1.1.1.2 1.1.1.3 1.1.1.7] }
       end
 
-      it { is_expected.to eq(pages_views) }
+      it { is_expected.to eq(pages_ips) }
     end
 
-    context 'parse file with missing IP' do
+    context 'when file with missing IP' do
       let(:file) { 'spec/fixtures/files/webserver_with_missing_ip.log' }
-
-      before do
-        pages_views << PageViews.new('/about', 3, 2)
-        pages_views << PageViews.new('/home', 2, 2)
-        pages_views << PageViews.new('/help_page/1', 2, 1)
+      let(:pages_ips) do
+        { '/about' => %w[1.1.1.1 1.1.1.1 1.1.1.5],
+          '/help_page/1' => %w[1.1.1.3 1.1.1.3],
+          '/home' => %w[1.1.1.2 1.1.1.6] }
       end
-
-      it { is_expected.to eq(pages_views) }
+      it { is_expected.to eq(pages_ips) }
     end
 
-    context 'parse file with missing page' do
+    context 'when file with missing page' do
       let(:file) { 'spec/fixtures/files/webserver_with_missing_page.log' }
-
-      before do
-        pages_views << PageViews.new('/about', 3, 2)
-        pages_views << PageViews.new('/home', 2, 2)
-        pages_views << PageViews.new('/help_page/1', 2, 1)
+      let(:pages_ips) do
+        { '/about' => %w[1.1.1.1 1.1.1.1 1.1.1.5],
+          '/help_page/1' => %w[1.1.1.4 1.1.1.4],
+          '/home' => %w[1.1.1.3 1.1.1.6] }
       end
 
-      it { is_expected.to eq(pages_views) }
+      it { is_expected.to eq(pages_ips) }
     end
   end
 end

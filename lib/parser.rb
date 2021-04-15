@@ -1,37 +1,27 @@
 # frozen_string_literal: true
 
 require_relative 'page_views'
-require 'English'
 
 class Parser
-  def initialize
+  def initialize(data_validator, path)
+    @path = path
+    @data_validator = data_validator
     @pages_visitors_ips = Hash.new([])
   end
 
-  def parse(path)
-    populate_page_visitors_ip(path)
-    construct_page_views
+  def call
+    parse_page_visitors_ip
   end
 
   private
 
-  def populate_page_visitors_ip(path)
-    File.foreach(path) do |line|
+  def parse_page_visitors_ip
+    File.foreach(@path) do |line|
       page, ip = line.split
-      if ip.nil?
-        puts "warning: Record does not have all needed info(line# #{$INPUT_LINE_NUMBER})"
-        next
-      end
+      next unless @data_validator.valid?(page, ip)
 
       @pages_visitors_ips[page] += [ip]
     end
-  end
-
-  def construct_page_views
-    [].tap do |page_views|
-      @pages_visitors_ips.each_pair do |page, ip_addresses|
-        page_views << PageViews.new(page, ip_addresses.count, ip_addresses.uniq.count)
-      end
-    end
+    @pages_visitors_ips
   end
 end

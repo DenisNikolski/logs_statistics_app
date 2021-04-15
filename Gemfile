@@ -2,6 +2,8 @@
 
 source 'https://rubygems.org'
 
+gem 'ipaddress'
+
 group :development do
   gem 'reek'
   gem 'rubocop', require: false
